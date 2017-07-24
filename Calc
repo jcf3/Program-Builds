@@ -1,87 +1,820 @@
-from tkinter import *author = 'Fossum'
+from tkinter import *
+author = 'Fossum'
+
 root = Tk()
-var = StringVar()var.set("0")hit = 0point_press = 0addition_temp = ""subtraction_temp = ""multiplication_temp = ""division_temp = ""function_list = ""
-def clear():    global hit    global point_press    global addition_temp    global subtraction_temp    global multiplication_temp    global division_temp    global function_list    var.set("0")    hit = 0    point_press = 0    addition_temp = 0    subtraction_temp = 0    multiplication_temp = 0    division_temp = 0    function_list = ""
-def back():    global hit    hold = var.get()    if hit == 0:        pass    elif hit == 1:        var.set("0")        hit -= 1    else:        if "0." in hold:            hold = str(hold)[:int(hit+1)]            var.set(str(hold))            hit -= 1        elif "-" in hold:            hold = str(hold)[:int(hit + 1)]            var.set(str(hold))            hit -= 1        else:            hold = str(hold)[:int(hit)]            var.set(str(hold))            hit -= 1
-def addition():    global hit    global addition_temp    global function_list    if function_list == "-":        addition_temp = var.get()        addition_temp = minus(subtraction_temp, addition_temp)        function_list = "+"    elif function_list == "÷":        addition_temp = var.get()        addition_temp = divide(division_temp, addition_temp)        function_list = "+"    elif function_list == "X":        addition_temp = var.get()        addition_temp = times(multiplication_temp, addition_temp)        function_list = "+"    else:        function_list = "+"        addition_temp = var.get()    hit = 0    var.set("+")
-def subtraction():    global hit    global subtraction_temp    global function_list    if function_list == "+":        subtraction_temp = var.get()        subtraction_temp = plus(addition_temp, subtraction_temp)        function_list = "-"    elif function_list == "÷":        subtraction_temp = var.get()        subtraction_temp = divide(division_temp, subtraction_temp)        function_list = "-"    elif function_list == "X":        subtraction_temp = var.get()        subtraction_temp = times(multiplication_temp, subtraction_temp)        function_list = "-"    else:        function_list = "-"        subtraction_temp = var.get()    hit = 0    var.set("-")
-def division():    global hit    global division_temp    global function_list    if function_list == "+":        division_temp = var.get()        division_temp = plus(addition_temp, division_temp)        function_list = "÷"    elif function_list == "-":        division_temp = var.get()        division_temp = minus(subtraction_temp, division_temp)        function_list = "÷"    elif function_list == "X":        division_temp = var.get()        division_temp = times(multiplication_temp, division_temp)        function_list = "÷"    else:        function_list = "÷"        division_temp = var.get()    hit = 0    var.set("÷")
-def multiplication():    global hit    global multiplication_temp    global function_list    if function_list == "+":        multiplication_temp = var.get()        multiplication_temp = plus(addition_temp, multiplication_temp)        function_list = "X"    elif function_list == "-":        multiplication_temp = var.get()        multiplication_temp = minus(subtraction_temp, multiplication_temp)        function_list = "X"    elif function_list == "÷":        multiplication_temp = var.get()        multiplication_temp = divide(division_temp, multiplication_temp)        function_list = "X"    else:        function_list = "X"        multiplication_temp = var.get()    hit = 0    var.set("X")
-def equals():    global hit    global addition_temp    global subtraction_temp    global multiplication_temp    global division_temp    global function_list    last_number = var.get()    if function_list == "+":        if last_number == "+":            var.set(plus(addition_temp, addition_temp))        else:            var.set(plus(addition_temp, last_number))    elif function_list == "-":        if last_number == "-":            var.set(minus(subtraction_temp, subtraction_temp))        else:            var.set(minus(subtraction_temp, last_number))    elif function_list == "X":        if last_number == "X":            var.set(times(multiplication_temp, multiplication_temp))        else:            var.set(times(multiplication_temp, last_number))    elif function_list == "÷":        if last_number == "÷":            var.set(divide(division_temp, division_temp))        else:            var.set(divide(division_temp, last_number))    hit = 0
-def plus(one, two):    try:        three = int(one) + int(two)    except ValueError:        three = float(one) + float(two)    return three
-def minus(one, two):    try:        three = int(one) - int(two)    except ValueError:        three = float(one) - float(two)    return three
-def times(one, two):    try:        three = int(one) * int(two)        return int(three)    except ValueError:        three = float(one) * float(two)        return float(three)
-def divide(one, two):    try:        three = int(one) / int(two)        return int(three)    except ValueError:        three = float(one) / float(two)        return float(three)
-def sign_flip():    hold = var.get()    if hold == "0":        pass    else:        if "0." in hold[:2]:            if str(hold)[0] == "-":                if hit == 17:                    hold = str(hold)[-int(hit+1):]                else:                    hold = str(hold)[-int(hit+2):]            else:                hold = "-" + str(hold)[-int(hit+2):]            var.set(str(hold))        elif "." in hold:            if str(hold)[0] == "-":                if hit == 17:                    hold = str(hold)[-int(hit):]                else:                    hold = str(hold)[-int(hit+1):]            else:                hold = "-" + str(hold)[-int(hit+1):]            var.set(str(hold))        else:            if str(hold)[0] == "-":                if hit == 17:                    hold = str(hold)[-int(hit-1):]                else:                    hold = str(hold)[-int(hit):]            else:                hold = "-" + str(hold)[-int(hit):]            var.set(str(hold))
-def point():    global point_press    hold = var.get()    if "." in hold:        pass    elif "-" in hold:        hold = str(hold)[-int(hit+1):] + "."        var.set(str(hold))        point_press = 1    else:        hold = str(hold)[-int(hit):] + "."        var.set(str(hold))        point_press = 1
-def add0():    hold = var.get()    if hold == "0":        global hit        hit = 0    else:        if hit == 1:            if point_press == 1:                hold = var.get()                hold = str(hold)[-int(hit+1):] + "0"                var.set(str(hold))            else:                var.set("0")        elif hit <= 16:            hold = var.get()            hold = str(hold)[-int(hit+1):] + "0"            var.set(str(hold))        else:            pass
-def add1():    if hit == 1:        if point_press == 1:            hold = var.get()            hold = str(hold)[-int(hit+1):] + "1"            var.set(str(hold))        else:            var.set("1")    elif hit <= 16:        hold = var.get()        hold = str(hold)[-int(hit+1):] + "1"        var.set(str(hold))    else:        pass
-def add2():    if hit == 1:        if point_press == 1:            hold = var.get()            hold = str(hold)[-int(hit+1):] + "2"            var.set(str(hold))        else:            var.set("2")    elif hit <= 16:        hold = var.get()        hold = str(hold)[-int(hit+1):] + "2"        var.set(str(hold))    else:        pass
-def add3():    if hit == 1:        if point_press == 1:            hold = var.get()            hold = str(hold)[-int(hit+1):] + "3"            var.set(str(hold))        else:            var.set("3")    elif hit <= 16:        hold = var.get()        hold = str(hold)[-int(hit+1):] + "3"        var.set(str(hold))    else:        pass
-def add4():    if hit == 1:        if point_press == 1:            hold = var.get()            hold = str(hold)[-int(hit+1):] + "4"            var.set(str(hold))        else:            var.set("4")    elif hit <= 16:        hold = var.get()        hold = str(hold)[-int(hit+1):] + "4"        var.set(str(hold))    else:        pass
-def add5():    if hit == 1:        if point_press == 1:            hold = var.get()            hold = str(hold)[-int(hit+1):] + "5"            var.set(str(hold))        else:            var.set("5")    elif hit <= 16:        hold = var.get()        hold = str(hold)[-int(hit+1):] + "5"        var.set(str(hold))    else:        pass
-def add6():    if hit == 1:        if point_press == 1:            hold = var.get()            hold = str(hold)[-int(hit+1):] + "6"            var.set(str(hold))        else:            var.set("6")    elif hit <= 16:        hold = var.get()        hold = str(hold)[-int(hit+1):] + "6"        var.set(str(hold))    else:        pass
-def add7():    if hit == 1:        if point_press == 1:            hold = var.get()            hold = str(hold)[-int(hit+1):] + "7"            var.set(str(hold))        else:            var.set("7")    elif hit <= 16:        hold = var.get()        hold = str(hold)[-int(hit+1):] + "7"        var.set(str(hold))    else:        pass
-def add8():    if hit == 1:        if point_press == 1:            hold = var.get()            hold = str(hold)[-int(hit+1):] + "8"            var.set(str(hold))        else:            var.set("8")    elif hit <= 16:        hold = var.get()        hold = str(hold)[-int(hit+1):] + "8"        var.set(str(hold))    else:        pass
-def add9():    if hit == 1:        if point_press == 1:            hold = var.get()            hold = str(hold)[-int(hit+1):] + "9"            var.set(str(hold))        else:            var.set("9")    elif hit <= 16:        hold = var.get()        hold = str(hold)[-int(hit+1):] + "9"        var.set(str(hold))    else:        pass
-root.title("Calculator")root.geometry("270x400+200+175")root.minsize(width=270, height=400)root.resizable(width=True, height=True)Grid.columnconfigure(root, 0, weight=1)Grid.rowconfigure(root, 0, weight=1)Grid.columnconfigure(root, 1, weight=1)Grid.rowconfigure(root, 1, weight=1)Grid.columnconfigure(root, 2, weight=1)Grid.rowconfigure(root, 2, weight=1)Grid.columnconfigure(root, 3, weight=1)Grid.rowconfigure(root, 3, weight=1)Grid.rowconfigure(root, 4, weight=1)Grid.rowconfigure(root, 5, weight=1)
-text = Message(root, anchor=E, justify="right", bg="white", textvariable=var, width=300, font=('arial', 20, 'bold'))text.grid(row=0, column=0, columnspan=4, sticky=N+S+E+W)
-a = Button(root, text="C", activebackground="silver", bd=0, justify="center", font=('arial', 18), command=clear)a.grid(row=1, column=0, sticky=N+S+E+W, columnspan=2)
-b = Button(root, text="◄", activebackground="silver", bd=0, justify="center", font=('arial', 18), command=back)b.grid(row=1, column=2, sticky=N+S+E+W)
-c = Button(root, text="÷", activebackground="silver", bd=0, justify="center", font=('arial', 20), command=division)c.grid(row=1, column=3, sticky=N+S+E+W)
-d = Button(root, text="7", activebackground="silver", bd=0, justify="center", font=('arial', 18), command=add7)d.grid(row=2, column=0, sticky=N+S+E+W)
-e = Button(root, text="8", activebackground="silver", bd=0, justify="center", font=('arial', 18), command=add8)e.grid(row=2, column=1, sticky=N+S+E+W)
-f = Button(root, text="9", activebackground="silver", bd=0, justify="center", font=('arial', 18), command=add9)f.grid(row=2, column=2, sticky=N+S+E+W)
-g = Button(root, text="X", activebackground="silver", bd=0, justify="center", font=('arial', 14),           command=multiplication)g.grid(row=2, column=3, sticky=N+S+E+W)
-h = Button(root, text="4", activebackground="silver", bd=0, justify="center", font=('arial', 18), command=add4)h.grid(row=3, column=0, sticky=N+S+E+W)
-i = Button(root, text="5", activebackground="silver", bd=0, justify="center", font=('arial', 18), command=add5)i.grid(row=3, column=1, sticky=N+S+E+W)
-j = Button(root, text="6", activebackground="silver", bd=0, justify="center", font=('arial', 18), command=add6)j.grid(row=3, column=2, sticky=N+S+E+W)
-k = Button(root, text="—", activebackground="silver", bd=0, justify="center", font=('arial', 12, 'bold'),           command=subtraction)k.grid(row=3, column=3, sticky=N+S+E+W)
-l = Button(root, text="1", activebackground="silver", bd=0, justify="center", font=('arial', 18), command=add1)l.grid(row=4, column=0, sticky=N+S+E+W)
-m = Button(root, text="2", activebackground="silver", bd=0, justify="center", font=('arial', 18), command=add2)m.grid(row=4, column=1, sticky=N+S+E+W)
-n = Button(root, text="3", activebackground="silver", bd=0, justify="center", font=('arial', 18), command=add3)n.grid(row=4, column=2, sticky=N+S+E+W)
-o = Button(root, text="+", activebackground="silver", bd=0, justify="center", font=('arial', 20), command=addition)o.grid(row=4, column=3, sticky=N+S+E+W)
-p = Button(root, text="±", activebackground="silver", bd=0, justify="center", font=('arial', 18), command=sign_flip)p.grid(row=5, column=0, sticky=N+S+E+W)
-q = Button(root, text="0", activebackground="silver", bd=0, justify="center", font=('arial', 18), command=add0)q.grid(row=5, column=1, sticky=N+S+E+W)
-r = Button(root, text=".", activebackground="silver", bd=0, justify="center", font=('arial', 20, 'bold'), command=point)r.grid(row=5, column=2, sticky=N+S+E+W)
-s = Button(root, text="=", activebackground="cornflowerblue", bd=0, justify="center", font=('arial', 22),           command=equals)s.grid(row=5, column=3, sticky=N+S+E+W)
-def enterA(event):    a.configure(background="lightgray")
-def leaveA(event):    a.configure(background="SystemButtonFace")
-def enterB(event):    b.configure(background="lightgray")
-def leaveB(event):    b.configure(background="SystemButtonFace")
-def enterC(event):    c.configure(background="lightgray")
-def leaveC(event):    c.configure(background="SystemButtonFace")
-def enterD(event):    d.configure(background="lightgray")
-def leaveD(event):    d.configure(background="SystemButtonFace")
-def enterE(event):    e.configure(background="lightgray")
-def leaveE(event):    e.configure(background="SystemButtonFace")
-def enterF(event):    f.configure(background="lightgray")
-def leaveF(event):    f.configure(background="SystemButtonFace")
-def enterG(event):    g.configure(background="lightgray")
-def leaveG(event):    g.configure(background="SystemButtonFace")
-def enterH(event):    h.configure(background="lightgray")
-def leaveH(event):    h.configure(background="SystemButtonFace")
-def enterI(event):    i.configure(background="lightgray")
-def leaveI(event):    i.configure(background="SystemButtonFace")
-def enterJ(event):    j.configure(background="lightgray")
-def leaveJ(event):    j.configure(background="SystemButtonFace")
-def enterK(event):    k.configure(background="lightgray")
-def leaveK(event):    k.configure(background="SystemButtonFace")
-def enterL(event):    l.configure(background="lightgray")
-def leaveL(event):    l.configure(background="SystemButtonFace")
-def enterM(event):    m.configure(background="lightgray")
-def leaveM(event):    m.configure(background="SystemButtonFace")
-def enterN(event):    n.configure(background="lightgray")
-def leaveN(event):    n.configure(background="SystemButtonFace")
-def enterO(event):    o.configure(background="lightgray")
-def leaveO(event):    o.configure(background="SystemButtonFace")
-def enterP(event):    p.configure(background="lightgray")
-def leaveP(event):    p.configure(background="SystemButtonFace")
-def enterQ(event):    q.configure(background="lightgray")
-def leaveQ(event):    q.configure(background="SystemButtonFace")
-def enterR(event):    r.configure(background="lightgray")
-def leaveR(event):    r.configure(background="SystemButtonFace")
-def enterS(event):    s.configure(background="royalblue", foreground="white")
-def leaveS(event):    s.configure(background="SystemButtonFace", foreground="Black")
-def hits(event):    global hit    if hit <= 16:        hit += 1    else:        hit = 17
-a.bind("<Enter>", enterA)a.bind("<Leave>", leaveA)b.bind("<Enter>", enterB)b.bind("<Leave>", leaveB)c.bind("<Enter>", enterC)c.bind("<Leave>", leaveC)d.bind("<Enter>", enterD)d.bind("<Leave>", leaveD)d.bind("<Button-1>", hits)e.bind("<Enter>", enterE)e.bind("<Leave>", leaveE)e.bind("<Button-1>", hits)f.bind("<Enter>", enterF)f.bind("<Leave>", leaveF)f.bind("<Button-1>", hits)g.bind("<Enter>", enterG)g.bind("<Leave>", leaveG)h.bind("<Enter>", enterH)h.bind("<Leave>", leaveH)h.bind("<Button-1>", hits)i.bind("<Enter>", enterI)i.bind("<Leave>", leaveI)i.bind("<Button-1>", hits)j.bind("<Enter>", enterJ)j.bind("<Leave>", leaveJ)j.bind("<Button-1>", hits)k.bind("<Enter>", enterK)k.bind("<Leave>", leaveK)l.bind("<Enter>", enterL)l.bind("<Leave>", leaveL)l.bind("<Button-1>", hits)m.bind("<Enter>", enterM)m.bind("<Leave>", leaveM)m.bind("<Button-1>", hits)n.bind("<Enter>", enterN)n.bind("<Leave>", leaveN)n.bind("<Button-1>", hits)o.bind("<Enter>", enterO)o.bind("<Leave>", leaveO)p.bind("<Enter>", enterP)p.bind("<Leave>", leaveP)q.bind("<Enter>", enterQ)q.bind("<Leave>", leaveQ)q.bind("<Button-1>", hits)r.bind("<Enter>", enterR)r.bind("<Leave>", leaveR)s.bind("<Enter>", enterS)s.bind("<Leave>", leaveS)root.mainloop()
+
+var = StringVar()
+var.set("0")
+hit = 0
+point_press = 0
+addition_temp = ""
+subtraction_temp = ""
+multiplication_temp = ""
+division_temp = ""
+function_list = ""
+
+
+def clear(event=None):
+	global hit
+	global point_press
+	global addition_temp
+	global subtraction_temp
+	global multiplication_temp
+	global division_temp
+	global function_list
+	var.set("0")
+	hit = 0
+	point_press = 0
+	addition_temp = 0
+	subtraction_temp = 0
+	multiplication_temp = 0
+	division_temp = 0
+	function_list = ""
+	reset()
+	
+	
+def back(event=None):
+	global hit
+	hold = var.get()
+	if hit == 0:
+		pass
+	elif hit == 1:
+		var.set("0")
+		hit -= 1
+	else:
+		if "0." in hold:
+			hold = str(hold)[:int(hit+1)]
+			var.set(str(hold))
+			hit -= 1
+		elif "-" in hold:
+			hold = str(hold)[:int(hit+1)]
+			var.set(str(hold))
+			hit -= 1
+		else:
+			hold = str(hold)[:int(hit-1)]
+			var.set(str(hold))
+			hit -= 1
+
+
+def addition(event=None):
+	global hit
+	global addition_temp
+	global function_list
+	if function_list == "-":
+		addition_temp = var.get()
+		addition_temp = minus(subtraction_temp, addition_temp)
+		function_list = "+"
+	elif function_list == "÷":
+		addition_temp = var.get()
+		addition_temp = divide(division_temp, addition_temp)
+		function_list = "+"
+	elif function_list == "X":
+		addition_temp = var.get()
+		addition_temp = times(multiplication_temp, addition_temp)
+		function_list = "+"
+	elif function_list == "=":
+		addition_temp = var.get()
+		function_list = "+"
+	else:
+		function_list = "+"
+		addition_temp = var.get()
+	hit = 0
+	var.set("+")
+		
+	
+def subtraction(event=None):
+	global hit
+	global subtraction_temp
+	global function_list
+	if function_list == "+":
+		subtraction_temp = var.get()
+		subtraction_temp = plus(addition_temp, subtraction_temp)
+		function_list = "-"
+	elif function_list == "÷":
+		subtraction_temp = var.get()
+		subtraction_temp = divide(division_temp, subtraction_temp)
+		function_list = "-"
+	elif function_list == "X":
+		subtraction_temp = var.get()
+		subtraction_temp = times(multiplication_temp, subtraction_temp)
+		function_list = "-"
+	elif function_list == "=":
+		subtraction_temp = var.get()
+		function_list = "-"
+	else:
+		function_list = "-"
+		subtraction_temp = var.get()
+	hit = 0
+	var.set("-")
+	
+	
+def division(event=None):
+	global hit
+	global division_temp
+	global function_list
+	if function_list == "+":
+		division_temp = var.get()
+		division_temp = plus(addition_temp, division_temp)
+		function_list = "÷"
+	elif function_list == "-":
+		division_temp = var.get()
+		division_temp = minus(subtraction_temp, division_temp)
+		function_list = "÷"
+	elif function_list == "X":
+		division_temp = var.get()
+		division_temp = times(multiplication_temp, division_temp)
+		function_list = "÷"
+	elif function_list == "=":
+		division_temp = var.get()
+		function_list = "÷"
+	else:
+		function_list = "÷"
+		division_temp = var.get()
+	hit = 0
+	var.set("÷")
+	
+	
+def multiplication(event=None):
+	global hit
+	global multiplication_temp
+	global function_list
+	if function_list == "+":
+		multiplication_temp = var.get()
+		multiplication_temp = plus(addition_temp, multiplication_temp)
+		function_list = "X"
+	elif function_list == "-":
+		multiplication_temp = var.get()
+		multiplication_temp = minus(subtraction_temp, multiplication_temp)
+		function_list = "X"
+	elif function_list == "÷":
+		multiplication_temp = var.get()
+		multiplication_temp = divide(division_temp, multiplication_temp)
+		function_list = "X"
+	elif function_list == "=":
+		multiplication_temp = var.get()
+		function_list = "X"
+	else:
+		function_list = "X"
+		multiplication_temp = var.get()
+	hit = 0
+	var.set("X")
+		
+		
+def equals(event=None):
+	global hit
+	global addition_temp
+	global subtraction_temp
+	global multiplication_temp
+	global division_temp
+	global function_list
+	last_number = var.get()
+	if function_list == "+":
+		if last_number == "+":
+			var.set(plus(addition_temp, addition_temp))
+		else:
+			var.set(plus(addition_temp, last_number))
+	elif function_list == "-":
+		if last_number == "-":
+			var.set(minus(subtraction_temp, subtraction_temp))
+		else:
+			var.set(minus(subtraction_temp, last_number))
+	elif function_list == "X":
+		if last_number == "X":
+			var.set(times(multiplication_temp, multiplication_temp))
+		else:
+			var.set(times(multiplication_temp, last_number))
+	elif function_list == "÷":
+		if last_number == "÷":
+			var.set(divide(division_temp, division_temp))
+		else:
+			var.set(divide(division_temp, last_number))
+	hit = 0
+	function_list = "="
+
+
+def plus(one, two):
+	if (float(one) + float(two)) % 1 == 0:
+		three = int(one) + int(two)
+		return int(three)
+	else:
+		three = float(one) + float(two)
+		return round(float(three), 16 - (len(str(int(three)))))
+
+
+def minus(one, two):
+	if (float(one) - float(two)) % 1 == 0:
+		three = int(one) - int(two)
+		return int(three)
+	else:
+		three = float(one) - float(two)
+		return round(float(three), 16 - (len(str(int(three)))))
+
+
+def times(one, two):
+	if (float(one) * float(two)) % 1 == 0:
+		three = int(one) * int(two)
+		return int(three)
+	else:
+		three = float(one) * float(two)
+		return round(float(three), 16 - (len(str(int(three)))))
+
+
+def divide(one, two):
+	try:
+		if (float(one) / float(two)) % 1 == 0:
+			three = int(one) / int(two)
+			return int(three)
+		else:
+			three = float(one) / float(two)
+			return round(float(three), 16 - (len(str(int(three)))))
+	except ZeroDivisionError:
+		zero_divide()
+		return "Cannot divide by zero"
+
+
+def sign_flip():
+	hold = var.get()
+	if hold == "0":
+		pass
+	else:
+		if "0." in hold[:2]:
+			if str(hold)[0] == "-":
+				if hit == 17:
+					hold = str(hold)[-int(hit+1):]
+				else:
+					hold = str(hold)[-int(hit+2):]
+			else:
+				hold = "-" + str(hold)[-int(hit+2):]
+			var.set(str(hold))
+		elif "." in hold:
+			if str(hold)[0] == "-":
+				if hit == 17:
+					hold = str(hold)[-int(hit):]
+				else:
+					hold = str(hold)[-int(hit+1):]
+			else:
+				hold = "-" + str(hold)[-int(hit+1):]
+			var.set(str(hold))
+		else:
+			if str(hold)[0] == "-":
+				if hit == 17:
+					hold = str(hold)[-int(hit-1):]
+				else:
+					hold = str(hold)[-int(hit):]
+			else:
+				hold = "-" + str(hold)[-int(hit):]
+			var.set(str(hold))
+
+
+def point(event=None):
+	reset()
+	global point_press
+	hold = var.get()
+	if "." in hold:
+		pass
+	elif "-" in hold:
+		hold = str(hold)[-int(hit+1):] + "."
+		var.set(str(hold))
+		point_press = 1
+	else:
+		hold = str(hold)[-int(hit):] + "."
+		var.set(str(hold))
+		point_press = 1
+
+
+def add0():
+	reset()
+	hold = var.get()
+	if hold == "0":
+		global hit
+		hit = 0
+	else:
+		if hit == 1:
+			if point_press == 1:
+				hold = var.get()
+				hold = str(hold)[-int(hit+1):] + "0"
+				var.set(str(hold))
+			else:
+				var.set("0")
+		elif hit <= 16:
+			hold = var.get()
+			hold = str(hold)[-int(hit+1):] + "0"
+			var.set(str(hold))
+		else:
+			pass
+
+
+def add1():
+	reset()
+	if hit == 1:
+		if point_press == 1:
+			hold = var.get()
+			hold = str(hold)[-int(hit+1):] + "1"
+			var.set(str(hold))
+		else:
+			var.set("1")
+	elif hit <= 16:
+		hold = var.get()
+		hold = str(hold)[-int(hit+1):] + "1"
+		var.set(str(hold))
+	else:
+		pass
+
+
+def add2():
+	reset()
+	if hit == 1:
+		if point_press == 1:
+			hold = var.get()
+			hold = str(hold)[-int(hit+1):] + "2"
+			var.set(str(hold))
+		else:
+			var.set("2")
+	elif hit <= 16:
+		hold = var.get()
+		hold = str(hold)[-int(hit+1):] + "2"
+		var.set(str(hold))
+	else:
+		pass
+
+
+def add3():
+	reset()
+	if hit == 1:
+		if point_press == 1:
+			hold = var.get()
+			hold = str(hold)[-int(hit+1):] + "3"
+			var.set(str(hold))
+		else:
+			var.set("3")
+	elif hit <= 16:
+		hold = var.get()
+		hold = str(hold)[-int(hit+1):] + "3"
+		var.set(str(hold))
+	else:
+		pass
+
+
+def add4():
+	reset()
+		if hit == 1:
+			if point_press == 1:
+				hold = var.get()
+				hold = str(hold)[-int(hit+1):] + "4"
+				var.set(str(hold))
+			else:
+				var.set("4")
+		elif hit <= 16:
+			hold = var.get()
+			hold = str(hold)[-int(hit+1):] + "4"
+			var.set(str(hold))
+		else:
+			pass
+	
+	
+def add5():
+	reset()
+	if hit == 1:
+		if point_press == 1:
+			hold = var.get()
+			hold = str(hold)[-int(hit+1):] + "5"
+			var.set(str(hold))
+		else:
+			var.set("5")
+	elif hit <= 16:
+		hold = var.get()
+		hold = str(hold)[-int(hit+1):] + "5"
+		var.set(str(hold))
+	else:
+		pass
+
+
+def add6():
+	reset()
+	if hit == 1:
+		if point_press == 1:
+			hold = var.get()
+			hold = str(hold)[-int(hit+1):] + "6"
+			var.set(str(hold))
+		else:
+			var.set("6")
+	elif hit <= 16:
+		hold = var.get()
+		hold = str(hold)[-int(hit+1):] + "6"
+		var.set(str(hold))
+	else:
+		pass
+		
+
+def add7():
+	reset()
+	if hit == 1:
+		if point_press == 1:
+			hold = var.get()
+			hold = str(hold)[-int(hit+1):] + "7"
+			var.set(str(hold))
+		else:
+			var.set("7")
+	elif hit <= 16:
+		hold = var.get()
+		hold = str(hold)[-int(hit+1):] + "7"
+		var.set(str(hold))
+	else:
+		pass
+
+
+def add8():
+	reset()
+	if hit == 1:
+		if point_press == 1:
+			hold = var.get()
+			hold = str(hold)[-int(hit+1):] + "8"
+			var.set(str(hold))
+		else:
+			var.set("8")
+	elif hit <= 16:
+		hold = var.get()
+		hold = str(hold)[-int(hit+1):] + "8"
+		var.set(str(hold))
+	else:
+		pass
+
+
+def add9():
+	reset()
+	if hit == 1:
+		if point_press == 1:
+			hold = var.get()
+			hold = str(hold)[-int(hit+1):] + "9"
+			var.set(str(hold))
+		else:
+			var.set("9")
+	elif hit <= 16:
+		hold = var.get()
+		hold = str(hold)[-int(hit+1):] + "9"
+		var.set(str(hold))
+	else:
+		pass
+
+root.title("Calculator")
+root.geometry("270x400+200+175")
+root.minsize(width=270, height=400)
+root.resizable(width=True, height=True)
+Grid.columnconfigure(root, 0, weight=1)
+Grid.rowconfigure(root, 0, weight=1)
+Grid.columnconfigure(root, 1, weight=1)
+Grid.rowconfigure(root, 1, weight=1)
+Grid.columnconfigure(root, 2, weight=1)
+Grid.rowconfigure(root, 2, weight=1)
+Grid.columnconfigure(root, 3, weight=1)
+Grid.rowconfigure(root, 3, weight=1)
+Grid.rowconfigure(root, 4, weight=1)
+Grid.rowconfigure(root, 5, weight=1)
+
+text = Message(root, anchor=E, justify="right", bg="white", textvariable=var, width=300, font=('arial', 20, 'bold'))
+text.grid(row=0, column=0, columnspan=4, sticky=N+S+E+W)
+
+a = Button(root, text="C", activebackground="silver", bd=0, justify="center", font=('arial', 18), command=clear)
+a.grid(row=1, column=0, sticky=N+S+E+W, columnspan=2)
+
+b = Button(root, text="◄", activebackground="silver", bd=0, justify="center", font=('arial', 18), command=back)
+b.grid(row=1, column=2, sticky=N+S+E+W)
+
+c = Button(root, text="÷", activebackground="silver", bd=0, justify="center", font=('arial', 20), command=division)
+c.grid(row=1, column=3, sticky=N+S+E+W)
+
+d = Button(root, text="7", activebackground="silver", bd=0, justify="center", font=('arial', 18), command=add7)
+d.grid(row=2, column=0, sticky=N+S+E+W)
+
+e = Button(root, text="8", activebackground="silver", bd=0, justify="center", font=('arial', 18), command=add8)
+e.grid(row=2, column=1, sticky=N+S+E+W)
+
+f = Button(root, text="9", activebackground="silver", bd=0, justify="center", font=('arial', 18), command=add9)
+f.grid(row=2, column=2, sticky=N+S+E+W)
+
+g = Button(root, text="X", activebackground="silver", bd=0, justify="center", font=('arial', 14), command=multiplication)
+g.grid(row=2, column=3, sticky=N+S+E+W)
+
+h = Button(root, text="4", activebackground="silver", bd=0, justify="center", font=('arial', 18), command=add4)
+h.grid(row=3, column=0, sticky=N+S+E+W)
+
+i = Button(root, text="5", activebackground="silver", bd=0, justify="center", font=('arial', 18), command=add5)
+i.grid(row=3, column=1, sticky=N+S+E+W)
+
+j = Button(root, text="6", activebackground="silver", bd=0, justify="center", font=('arial', 18), command=add6)
+j.grid(row=3, column=2, sticky=N+S+E+W)
+
+k = Button(root, text="—", activebackground="silver", bd=0, justify="center", font=('arial', 12, 'bold'), command=subtraction)
+k.grid(row=3, column=3, sticky=N+S+E+W)
+
+l = Button(root, text="1", activebackground="silver", bd=0, justify="center", font=('arial', 18), command=add1)
+l.grid(row=4, column=0, sticky=N+S+E+W)
+
+m = Button(root, text="2", activebackground="silver", bd=0, justify="center", font=('arial', 18), command=add2)
+m.grid(row=4, column=1, sticky=N+S+E+W)
+
+n = Button(root, text="3", activebackground="silver", bd=0, justify="center", font=('arial', 18), command=add3)
+n.grid(row=4, column=2, sticky=N+S+E+W)
+
+o = Button(root, text="+", activebackground="silver", bd=0, justify="center", font=('arial', 20), command=addition)
+o.grid(row=4, column=3, sticky=N+S+E+W)
+
+p = Button(root, text="±", activebackground="silver", bd=0, justify="center", font=('arial', 18), command=sign_flip)
+p.grid(row=5, column=0, sticky=N+S+E+W)
+
+q = Button(root, text="0", activebackground="silver", bd=0, justify="center", font=('arial', 18), command=add0)
+q.grid(row=5, column=1, sticky=N+S+E+W)
+
+r = Button(root, text=".", activebackground="silver", bd=0, justify="center", font=('arial', 20, 'bold'), command=point)
+r.grid(row=5, column=2, sticky=N+S+E+W)
+
+s = Button(root, text="=", activebackground="cornflowerblue", bd=0, justify="center", font=('arial', 22), command=equals)
+s.grid(row=5, column=3, sticky=N+S+E+W)
+
+
+def enterA(event):
+	a.configure(background="lightgray")
+
+
+def leaveA(event):
+	a.configure(background="SystemButtonFace")
+
+
+def enterB(event):
+	b.configure(background="lightgray")
+
+
+def leaveB(event):
+	b.configure(background="SystemButtonFace")
+
+
+def enterC(event):
+	c.configure(background="lightgray")
+
+
+def leaveC(event):
+	c.configure(background="SystemButtonFace")
+
+
+def enterD(event):
+	d.configure(background="lightgray")
+
+
+def leaveD(event):
+	d.configure(background="SystemButtonFace")
+
+
+def enterE(event):
+	e.configure(background="lightgray")
+
+
+def leaveE(event):
+	e.configure(background="SystemButtonFace")
+
+
+def enterF(event):
+	f.configure(background="lightgray")
+
+
+def leaveF(event):
+	f.configure(background="SystemButtonFace")
+
+
+def enterG(event):
+	g.configure(background="lightgray")
+
+
+def leaveG(event):
+	g.configure(background="SystemButtonFace")
+
+
+def enterH(event):
+	h.configure(background="lightgray")
+
+
+def leaveH(event):
+	h.configure(background="SystemButtonFace")
+
+
+def enterI(event):
+	i.configure(background="lightgray")
+
+
+def leaveI(event):
+	i.configure(background="SystemButtonFace")
+
+
+def enterJ(event):
+	j.configure(background="lightgray")
+
+
+def leaveJ(event):
+	j.configure(background="SystemButtonFace")
+
+
+def enterK(event):
+	k.configure(background="lightgray")
+
+
+def leaveK(event):
+	k.configure(background="SystemButtonFace")
+
+
+def enterL(event):
+	l.configure(background="lightgray")
+
+
+def leaveL(event):
+	l.configure(background="SystemButtonFace")
+
+
+def enterM(event):
+	m.configure(background="lightgray")
+
+
+def leaveM(event):
+	m.configure(background="SystemButtonFace")
+
+
+def enterN(event):
+	n.configure(background="lightgray")
+
+
+def leaveN(event):
+	n.configure(background="SystemButtonFace")
+
+
+def enterO(event):
+	o.configure(background="lightgray")
+
+
+def leaveO(event):
+	o.configure(background="SystemButtonFace")
+
+
+def enterP(event):
+	p.configure(background="lightgray")
+
+
+def leaveP(event):
+	p.configure(background="SystemButtonFace")
+
+
+def enterQ(event):
+	q.configure(background="lightgray")
+
+
+def leaveQ(event):
+	q.configure(background="SystemButtonFace")
+
+
+def enterR(event):
+	r.configure(background="lightgray")
+
+
+def leaveR(event):
+	r.configure(background="SystemButtonFace")
+
+
+def enterS(event):
+	s.configure(background="royalblue", foreground="white")
+	
+
+def leaveS(event):
+	s.configure(background="SystemButtonFace", foreground="Black")
+
+
+def hits(event):
+	global hit
+	if hit <= 16:
+		hit += 1
+	else:
+		hit = 17
+	print(hit)
+
+
+def combine0(event):
+	add0()
+	hits(None)
+
+
+def combine1(event):
+	add1()
+	hits(None)
+
+
+def combine2(event):
+	add2()
+	hits(None)
+
+
+def combine3(event):
+	add3()
+	hits(None)
+
+
+def combine4(event):
+	add4()
+	hits(None)
+
+
+def combine5(event):
+	add5()
+	hits(None)
+
+
+def combine6(event):
+	add6()
+	hits(None)
+
+
+def combine7(event):
+	add7()
+	hits(None)
+
+
+def combine8(event):
+	add8()
+	hits(None)
+
+
+def combine9(event):
+	add9()
+	hits(None)
+
+
+def zero_divide():
+	text.config(font=('arial', 18, 'bold'))
+
+
+def reset():
+	text.config(font=('arial', 20, 'bold'))
+
+root.bind("<Escape>", clear)
+root.bind("<BackSpace>", back)
+root.bind("<Return>", equals)
+root.bind_all("1", combine1)
+root.bind("2", combine2)
+root.bind("3", combine3)
+root.bind("4", combine4)
+root.bind("5", combine5)
+root.bind("6", combine6)
+root.bind("7", combine7)
+root.bind("8", combine8)
+root.bind("9", combine9)
+root.bind("0", combine0)
+root.bind(".", point)
+root.bind("+", multiplication)
+root.bind("-", subtraction)
+root.bind("/", division)
+root.bind("*", multiplication)
+
+a.bind("<Enter>", enterA)
+a.bind("<Leave>", leaveA)
+b.bind("<Enter>", enterB)
+b.bind("<Leave>", leaveB)
+c.bind("<Enter>", enterC)
+c.bind("<Leave>", leaveC)
+d.bind("<Enter>", enterD)
+d.bind("<Leave>", leaveD)
+d.bind("<Button-1>", hits)
+e.bind("<Enter>", enterE)
+e.bind("<Leave>", leaveE)
+e.bind("<Button-1>", hits)
+f.bind("<Enter>", enterF)
+f.bind("<Leave>", leaveF)
+f.bind("<Button-1>", hits)
+g.bind("<Enter>", enterG)
+g.bind("<Leave>", leaveG)
+h.bind("<Enter>", enterH)
+h.bind("<Leave>", leaveH)
+h.bind("<Button-1>", hits)
+i.bind("<Enter>", enterI)
+i.bind("<Leave>", leaveI)
+i.bind("<Button-1>", hits)
+j.bind("<Enter>", enterJ)
+j.bind("<Leave>", leaveJ)
+j.bind("<Button-1>", hits)
+k.bind("<Enter>", enterK)
+k.bind("<Leave>", leaveK)
+l.bind("<Enter>", enterL)
+l.bind("<Leave>", leaveL)
+l.bind("<Button-1>", hits)
+m.bind("<Enter>", enterM)
+m.bind("<Leave>", leaveM)
+m.bind("<Button-1>", hits)
+n.bind("<Enter>", enterN)
+n.bind("<Leave>", leaveN)
+n.bind("<Button-1>", hits)
+o.bind("<Enter>", enterO)
+o.bind("<Leave>", leaveO)
+p.bind("<Enter>", enterP)
+p.bind("<Leave>", leaveP)
+q.bind("<Enter>", enterQ)
+q.bind("<Leave>", leaveQ)
+q.bind("<Button-1>", hits)
+r.bind("<Enter>", enterR)
+r.bind("<Leave>", leaveR)
+s.bind("<Enter>", enterS)
+s.bind("<Leave>", leaveS)
+root.mainloop()
